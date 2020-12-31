@@ -34,11 +34,13 @@
         </div>
     </div>
 
-{{--    <script>--}}
-{{--        function onCheckoutClicked(){--}}
-{{--            alert('you have successfully payd a total of {{ $totalPrice }}');--}}
-{{--        }--}}
-{{--    </script>--}}
+    @auth()
+    <script>
+        function onCheckoutClicked(){
+            alert('you have successfully payd a total of {{ $totalPrice }}. thanks for shoping with us {{ auth()->user()->name }}');
+        }
+    </script>
+    @endauth
 @else
     <div class="row">
         <div class="col-sm-6 col-md-6 col-md-offset-3 col-sm-offset-3">

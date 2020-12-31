@@ -26,3 +26,7 @@ Route::get('/checkout', 'ShoeController@getCheckout')->name('checkout');
 
 Route::resource('shoe', 'ShoeController');
 //Route::get('/shoes', 'ShoeController@index')->name('shoes');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

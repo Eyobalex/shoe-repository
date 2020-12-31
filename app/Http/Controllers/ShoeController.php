@@ -15,6 +15,7 @@ class ShoeController extends Controller
 
     public function __construct ()
     {
+//        $this->middleware('auth');
         $this->uploadPath = public_path('images');
     }
 
