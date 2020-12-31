@@ -18,5 +18,11 @@ Route::get('/', function () {
 });
 
 
+Route::get('/add-to-cart/{id}', 'ShoeController@addToCart')->name('product.addToCart');
+Route::get('/reduce/{id}', 'ShoeController@reduceByOne')->name('product.reduceByOne');
+Route::get('/remove/{id}', 'ShoeController@removeItem')->name('product.remove');
+Route::get('/shoping-cart', 'ShoeController@getcart')->name('product.shoppingCart');
+Route::get('/checkout', 'ShoeController@getCheckout')->name('checkout');
+
 Route::resource('shoe', 'ShoeController');
 //Route::get('/shoes', 'ShoeController@index')->name('shoes');

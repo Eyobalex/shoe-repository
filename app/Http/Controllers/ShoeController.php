@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\Shoe;
 use Illuminate\Http\Request;
 use Intervention\Image\Facades\Image;
 use function PHPUnit\Framework\isNull;
-
+use Illuminate\Support\Facades\Session;
 class ShoeController extends Controller
 {
     private $uploadPath;
@@ -121,6 +122,66 @@ class ShoeController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+
+    public function addToCart(Request $request, $id)
+    {
+        $product = Shoe::find($id);
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new Cart($oldCart);
+        $cart->add($product, $product->id);
+
+        $request->session()->put('cart', $cart);
+        return redirect()->route('shoe.index');
+    }
+
+    public function reduceByOne($id) {
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new Cart($oldCart);
+        $cart->reduceByOne($id);
+
+        if (count($cart->items) > 0) {
+            Session::put('cart', $cart);
+        } else {
+            Session::forget('cart');
+        }
+        return redirect()->route('shoe.index');
+    }
+
+    public function removeItem($id) {
+        $oldCart = Session::has('cart') ? Session::get('cart') : null;
+        $cart = new Cart($oldCart);
+        $cart->removeItem($id);
+
+        if (count($cart->items) > 0) {
+            Session::put('cart', $cart);
+        } else {
+            Session::forget('cart');
+        }
+
+        return redirect()->route('shoe.index');
+    }
+
+    public function getCart()
+    {
+        if (!Session::has('cart')) {
+            return view('shoe.shoping-cart');
+        }
+        $oldCart = Session::get('cart');
+        $cart = new Cart($oldCart);
+        return view('shoe.shoping-cart', ['products' => $cart->items, 'totalPrice' => $cart->totalPrice]);
+    }
+
+    public function getCheckout()
+    {
+        if (!Session::has('cart')) {
+            return view('shoe.shoping-cart');
+        }
+        $oldCart = Session::get('cart');
+        $cart = new Cart($oldCart);
+        $total = $cart->totalPrice;
+        return view('shop.checkout', ['total' => $total]);
     }
 
 
